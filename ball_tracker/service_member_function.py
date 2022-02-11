@@ -4,10 +4,10 @@ import rclpy
 from rclpy.node import Node
 
 
-class MinimalService(Node):
+class VisionService(Node):
 
     def __init__(self):
-        super().__init__('minimal_service')
+        super().__init__('vision_service')
         self.srv = self.create_service(AddTwoInts, 'add_two_ints', self.add_two_ints_callback)
 
     def add_two_ints_callback(self, request, response):
@@ -16,13 +16,25 @@ class MinimalService(Node):
 
         return response
 
+    def calibrate_camera_callback(self, request, response):
+        self.get_logger().info('request')
+        return response
+
+    def find_balls_callback(self, request, response):
+        self.get_logger().info('request')
+        return response
+
+    def find_closest_ball_callback(self, request, response):
+        self.get_logger().info('request')
+        return response
+
 
 def main():
     rclpy.init()
 
-    minimal_service = MinimalService()
+    vision_service = VisionService()
 
-    rclpy.spin(minimal_service)
+    rclpy.spin(vision_service)
 
     rclpy.shutdown()
 
