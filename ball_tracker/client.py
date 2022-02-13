@@ -4,10 +4,11 @@ import rclpy
 from rclpy.node import Node
 
 
-class MinimalClientAsync(Node):
+class Client(Node):
 
     def __init__(self):
-        super().__init__('minimal_client_async')
+        super().__init__('client')
+        self.future = None
         self.cli = self.create_client(AddTwoInts, 'add_two_ints')
         while not self.cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
@@ -22,7 +23,7 @@ class MinimalClientAsync(Node):
 def main():
     rclpy.init()
 
-    minimal_client = MinimalClientAsync()
+    minimal_client = Client()
     minimal_client.send_request()
 
     while rclpy.ok():

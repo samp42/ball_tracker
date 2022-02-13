@@ -289,7 +289,7 @@ log/
 # qcreator stuff
 CMakeLists.txt.user
 
-srv/_*.py
+ball_tracker_interfaces/_*.py
 *.pcd
 *.pyc
 qtcreator-*
@@ -306,3 +306,5 @@ AMENT_IGNORE
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,ros2,opencv
 
+# test media
+/test/assets/
