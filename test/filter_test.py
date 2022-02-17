@@ -34,8 +34,7 @@ if __name__ == '__main__':
     hMin = sMin = vMin = hMax = sMax = vMax = 0
     phMin = psMin = pvMin = phMax = psMax = pvMax = 0
 
-
-    img = cv2.imread('assets/img1.jpg.jpg')
+    img = cv2.imread('assets/img1.jpg')
     output = img
     waitTime = 33
 

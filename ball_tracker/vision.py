@@ -17,6 +17,11 @@ def filter_color(img: np.ndarray, color: Colors.value) -> np.ndarray:
     return cv.inRange(hsv, lower, upper)
 
 
+def find_countours(img: np.ndarray) -> np.ndarray:
+    """Return image with contours highlighted"""
+    pass
+
+
 def get_distance(blobs: [float]) -> [float]:
     """From an image, return distances of blobs based on size of object and measured size of blobs"""
     return [1.0]

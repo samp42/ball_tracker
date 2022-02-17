@@ -66,7 +66,7 @@ if __name__ == '__main__':
 	thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
 
 	# find contours
-	# label_img = img.copy()
+	# label_img = img.coresultspy()
 	contour_img = img.copy()
 	contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	contours = contours[0] if len(contours) == 2 else contours[1]
@@ -98,7 +98,7 @@ if __name__ == '__main__':
 	print('number_isolated:', isolated_count)
 
 	# save result
-	cv2.imwrite("blobs_connected_result.jpg", contour_img)
+	cv2.imwrite("results/blobs_connected_result.jpg", contour_img)
 
 	# show images
 	cv2.imshow("thresh", thresh)

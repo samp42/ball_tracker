@@ -308,3 +308,4 @@ AMENT_IGNORE
 
 # test media
 /test/assets/
+/test/results/
