@@ -4,20 +4,20 @@ from ball_tracker.enum.cameras_enum import Cameras
 from ball_tracker.enum.colors_enum import Colors
 
 
-def get_image_from_camera(id: Cameras.value) -> np.ndarray:
-    """Return an image from camera id"""
-    return cv.imread()
+# def get_image_from_camera(port: Cameras.value) -> np.ndarray:
+#     """Return an image from camera id"""
+    # return cv.imread()
 
 
-def filter_color(img: np.ndarray, color: Colors.value) -> np.ndarray:
+def filter_color(img: np.ndarray, color) -> np.ndarray:
     """Return mask of filtered image with given color"""
     hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
-    lower = [color.hue_min, color.sat_min, color.val_min]
-    upper = [color.hue_max, color.sat_max, color.val_max]
+    lower = color.get_min_values()
+    upper = color.get_max_values()
     return cv.inRange(hsv, lower, upper)
 
 
-def find_countours(img: np.ndarray) -> np.ndarray:
+def find_contours(img: np.ndarray) -> np.ndarray:
     """Return image with contours highlighted"""
     pass
 
