@@ -2,18 +2,19 @@ import numpy as np
 
 
 class Color:
-    def __init__(self, hmin, smin, vmin, hmax, smax, vmax):
+    """A structure aggregating minimum and maximum HSL values of a color"""
+    def __init__(self, hmin, smin, lmin, hmax, smax, lmax):
         self.hue_min = hmin
         self.sat_min = smin
-        self.val_min = vmin
+        self.lum_min = lmin
         self.hue_max = hmax
         self.sat_max = smax
-        self.val_max = vmax
+        self.lum_max = lmax
 
     def get_min_values(self) -> np.array:
-        """Return minimum hue, sat, val"""
-        return np.array([self.hue_min, self.sat_min, self.val_min])
+        """Return minimum HSL values"""
+        return np.array([self.hue_min, self.sat_min, self.lum_min])
 
     def get_max_values(self) -> np.array:
-        """Return maximum hue, sat, val"""
-        return np.array([self.hue_max, self.sat_max, self.val_max])
+        """Return maximum HSL values"""
+        return np.array([self.hue_max, self.sat_max, self.lum_max])
