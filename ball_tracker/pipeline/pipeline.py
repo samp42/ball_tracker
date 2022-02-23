@@ -13,12 +13,14 @@ class Pipeline:
     def __init__(self, color: Colors.value):
         """initializes all values to presets or None if need to be set
         """
+        self.color = color
 
-        self.__mask_input = None
-        self.__hsl_threshold_input = None
         self.__hsl_threshold_hue = [color.hue_min, color.hue_max]
         self.__hsl_threshold_saturation = [color.sat_min, color.sat_max]
         self.__hsl_threshold_luminance = [color.lum_min, color.lum_max]
+
+        self.__mask_input = None
+        self.__hsl_threshold_input = None
 
         self.hsl_threshold_output = None
 
@@ -46,9 +48,13 @@ class Pipeline:
 
         self.filter_contours_output = None
 
+        self.processed_image = None
+
     def process(self, source0: np.ndarray) -> DetectedContour:
         """
         Runs the pipeline and sets all outputs to new values.
+        Returns:
+            List of DetectedContour objects detected by the pipeline
         """
         # Step HSL_Threshold0:
         self.__hsl_threshold_input = source0
@@ -83,8 +89,7 @@ class Pipeline:
 
         return self.filter_contours_output
 
-    @staticmethod
-    def __hsl_threshold(thresh_input, hue, sat, lum):
+    def hsl_threshold(self, thresh_input, hue, sat, lum):
         """Segment an image based on hue, saturation, and luminance ranges.
         Args:
             thresh_input: A BGR numpy.ndarray.
@@ -97,8 +102,7 @@ class Pipeline:
         out = cv2.cvtColor(thresh_input, cv2.COLOR_BGR2HLS)
         return cv2.inRange(out, (hue[0], lum[0], sat[0]), (hue[1], lum[1], sat[1]))
 
-    @staticmethod
-    def __mask(mask_input, mask):
+    def mask(self, mask_input, mask):
         """Filter out an area of an image using a binary mask.
         Args:
             mask_input: A three channel numpy.ndarray.
@@ -108,8 +112,7 @@ class Pipeline:
         """
         return cv2.bitwise_and(mask_input, mask_input, mask=mask)
 
-    @staticmethod
-    def __find_contours(ctr_input, external_only):
+    def find_contours(self, ctr_input, external_only):
         """Sets the values of pixels in a binary image to their distance to the nearest black pixel.
         Args:
             ctr_input: A numpy.ndarray.
@@ -125,10 +128,9 @@ class Pipeline:
         im2, contours, hierarchy = cv2.findContours(ctr_input, mode=mode, method=method)
         return contours
 
-    @staticmethod
-    def __filter_contours(input_contours, min_area, min_perimeter, min_width, max_width,
-                          min_height, max_height, solidity, max_vertex_count, min_vertex_count,
-                          min_ratio, max_ratio):
+    def filter_contours(self, input_contours, min_area, min_perimeter, min_width, max_width,
+                        min_height, max_height, solidity, max_vertex_count, min_vertex_count,
+                        min_ratio, max_ratio):
         """Filters out contours that do not meet certain criteria.
         Args:
             input_contours: Contours as a list of numpy.ndarray.
@@ -144,10 +146,10 @@ class Pipeline:
             min_ratio: Minimum ratio of width to height.
             max_ratio: Maximum ratio of width to height.
         Returns:
-            Contours as a list of numpy.ndarray.
+            List of detected contours objects
         """
         output = []
-        detectedContour: DetectedContour = None
+        detected_contour: DetectedContour
         for contour in input_contours:
             x, y, w, h = cv2.boundingRect(contour)
             if w < min_width or w > max_width:
@@ -173,10 +175,7 @@ class Pipeline:
             added from GRIP pipeline's generated code
             compute minimum enclosing circle and get the diameter and position to get position of the ball in frame
             """
-            (detectedContour.x, detectedContour.y), detectedContour.radius = cv2.minEnclosingCircle(contour)
-
-            output.append(detectedContour)
+            (x, y), radius = cv2.minEnclosingCircle(contour)
+            detected_contour = DetectedContour(contour, x, y, radius, self.color)
+            output.append(detected_contour)
         return output
-
-
-
