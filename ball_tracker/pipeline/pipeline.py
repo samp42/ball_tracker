@@ -62,11 +62,6 @@ class Pipeline:
                                                            self.__hsl_threshold_saturation,
                                                            self.__hsl_threshold_luminance)
 
-        # Step Mask0:
-        self.__mask_input = source0
-        self.__mask_mask = self.hsl_threshold_output
-        (self.mask_output) = self.mask(self.__mask_input, self.__mask_mask)
-
         # Step Find_Contours0:
         self.__find_contours_input = self.hsl_threshold_output
         (self.find_contours_output) = self.find_contours(self.__find_contours_input,
@@ -101,16 +96,6 @@ class Pipeline:
         """
         out = cv2.cvtColor(thresh_input, cv2.COLOR_BGR2HLS)
         return cv2.inRange(out, (hue[0], lum[0], sat[0]), (hue[1], lum[1], sat[1]))
-
-    def mask(self, mask_input, mask):
-        """Filter out an area of an image using a binary mask.
-        Args:
-            mask_input: A three channel numpy.ndarray.
-            mask: A black and white numpy.ndarray.
-        Returns:
-            A three channel numpy.ndarray.
-        """
-        return cv2.bitwise_and(mask_input, mask_input, mask=mask)
 
     def find_contours(self, ctr_input, external_only):
         """Sets the values of pixels in a binary image to their distance to the nearest black pixel.
@@ -176,6 +161,9 @@ class Pipeline:
             compute minimum enclosing circle and get the diameter and position to get position of the ball in frame
             """
             (x, y), radius = cv2.minEnclosingCircle(contour)
-            detected_contour = DetectedContour(hull, x, y, radius, self.color)
+            detected_contour = DetectedContour(0, hull, x, y, radius, self.color)
             output.append(detected_contour)
         return output
+
+    def min_enclosing_circle(self, contour):
+        """From detected contours, find circle of the ball"""
